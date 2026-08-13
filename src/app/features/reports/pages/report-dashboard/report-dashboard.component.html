@@ -1,0 +1,43 @@
+<div class="page-container">
+  <div class="header">
+    <h2>Reporte de Tareas Pendientes y Vencidas</h2>
+    <div class="filters">
+      <input type="text" placeholder="Buscar usuario..." #searchInput (keyup.enter)="onSearch(searchInput.value)">
+      <button class="btn-icon" (click)="onSearch(searchInput.value)">Buscar</button>
+      <button class="primary" (click)="loadReport()">Actualizar</button>
+    </div>
+  </div>
+
+  <div class="report-cards" *ngIf="reportData.length > 0">
+    <div class="card" *ngFor="let userReport of reportData">
+      <h3>{{ userReport.usuario }}</h3>
+      
+      <div class="stats">
+        <div class="stat pending">
+          <span class="label">Pendientes Totales</span>
+          <span class="value">{{ userReport.totalPendientes }}</span>
+        </div>
+        
+        <div class="stat overdue">
+          <span class="label">Vencidas</span>
+          <span class="value">{{ userReport.totalVencidas }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="reportData.length === 0 && !isLoading">
+    <p>No se encontraron datos para el reporte.</p>
+  </div>
+
+  <app-pagination
+    *ngIf="totalPages > 1"
+    [pageNumber]="pageNumber"
+    [totalPages]="totalPages"
+    [hasNextPage]="hasNextPage"
+    [hasPreviousPage]="hasPreviousPage"
+    (pageChange)="onPageChange($event)">
+  </app-pagination>
+
+  <app-loader [isLoading]="isLoading"></app-loader>
+</div>

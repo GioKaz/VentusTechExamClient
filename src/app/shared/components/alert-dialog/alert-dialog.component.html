@@ -1,0 +1,14 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="close()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header" [ngClass]="alertData?.type">
+      <h3>{{ alertData?.title }}</h3>
+      <button class="close-btn" (click)="close()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p [innerHTML]="alertData?.message"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="primary" (click)="close()">Aceptar</button>
+    </div>
+  </div>
+</div>

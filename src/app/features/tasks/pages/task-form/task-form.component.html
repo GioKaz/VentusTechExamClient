@@ -1,0 +1,65 @@
+<div class="page-container">
+  <h2>{{ isEditMode ? 'Editar Tarea' : 'Nueva Tarea' }}</h2>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Título *</label>
+      <input type="text" formControlName="title" autofocus />
+      <div class="error" *ngIf="taskForm.get('title')?.touched && taskForm.get('title')?.invalid">
+        El título es obligatorio.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Descripción</label>
+      <textarea formControlName="description"></textarea>
+      <div class="error" *ngIf="taskForm.get('description')?.touched && taskForm.get('description')?.invalid">
+        La Descripcion es obligatorio y máximo 500 caracteres.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Prioridad *</label>
+      <select formControlName="priority">
+        <option [value]="0">Baja</option>
+        <option [value]="1">Media</option>
+        <option [value]="2">Alta</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Fecha Límite *</label>
+      <input type="date" formControlName="fechaLimite" [min]="minDate" />
+      <div class="error" *ngIf="taskForm.get('fechaLimite')?.touched && taskForm.get('fechaLimite')?.invalid">
+        No se permiten fechas menores a la actual.
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="isEditMode">
+      <label>Estatus</label>
+      <select formControlName="estatus">
+        <option [value]="0">Pendiente</option>
+        <option [value]="1">En Progreso</option>
+        <option [value]="2">Completada</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Usuario Responsable *</label>
+      <input type="text" formControlName="usuarioResponsable" />
+      <div class="error" *ngIf="taskForm.get('usuarioResponsable')?.touched && taskForm.get('usuarioResponsable')?.invalid">
+        El usuario es obligatorio.
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" (click)="cancel()">Cancelar</button>
+      <button type="submit" class="primary" [disabled]="taskForm.invalid || isSaving">
+        <span *ngIf="isSaving" class="btn-spinner"></span>
+        <span>Guardar</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<app-loader [isLoading]="isLoading"></app-loader>
