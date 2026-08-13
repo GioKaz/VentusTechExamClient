@@ -1,0 +1,79 @@
+<div class="page-container">
+  <div class="header">
+    <h2>Gestión de Tareas</h2>
+    <button class="primary" (click)="createTask()">Nueva Tarea</button>
+  </div>
+
+  <div class="filters">
+    <input type="text" placeholder="Filtrar por responsable..." [(ngModel)]="userFilter" (keyup.enter)="onFilterChange()">
+    
+    <select [(ngModel)]="priorityFilter" (change)="onFilterChange()">
+      <option [ngValue]="null">Todas las prioridades</option>
+      <option [ngValue]="0">Baja</option>
+      <option [ngValue]="1">Media</option>
+      <option [ngValue]="2">Alta</option>
+    </select>
+    
+<select [(ngModel)]="statusFilter" (change)="onFilterChange()">
+      <option [ngValue]="null">Todos los estados</option>
+      <option [ngValue]="0">Pendiente</option>
+      <option [ngValue]="1">En Progreso</option>
+      <option [ngValue]="2">Completada</option>
+    </select>
+    
+<button class="primary" (click)="onFilterChange()">Buscar</button>
+  </div>
+
+  <table class="grid" *ngIf="tasksData && tasksData.items.length > 0; else noData">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Responsable</th>
+        <th>Prioridad</th>
+        <th>Estatus</th>
+        <th>Fecha Límite</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasksData.items">
+        <td>{{ task.title }}</td>
+        <td>{{ task.usuarioResponsable }}</td>
+        <td>{{ task.priority | priorityLabel }}</td>
+        <td>{{ task.estatus | statusLabel }}</td>
+        <td>{{ task.fechaLimite | date:'shortDate' }}</td>
+        <td>
+          <button class="btn-icon" (click)="editTask(task.id)">Editar</button>
+          <button class="btn-icon danger" (click)="requestDelete(task.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noData>
+    <div class="empty-state" *ngIf="!isLoading">No se encontraron tareas.</div>
+  </ng-template>
+
+  <app-pagination 
+    *ngIf="tasksData"
+    [pageNumber]="tasksData.pageNumber"
+    [totalPages]="tasksData.totalPages"
+    [hasPreviousPage]="tasksData.hasPreviousPage"
+    [hasNextPage]="tasksData.hasNextPage"
+    (pageChange)="onPageChange($event)">
+  </app-pagination>
+</div>
+
+<app-loader [isLoading]="isLoading"></app-loader>
+<app-confirm-dialog 
+  [isVisible]="isDialogVisible"
+  [isLoading]="isDeleting"
+  title="Eliminar Tarea"
+  message="¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer."
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()">
+</app-confirm-dialog>
+
+
+
+
