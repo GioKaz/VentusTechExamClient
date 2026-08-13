@@ -1,0 +1,5 @@
+<div class="pagination-container" *ngIf="totalPages > 1">
+  <button (click)="onPrevious()" [disabled]="!hasPreviousPage">Anterior</button>
+  <span>Página {{ pageNumber }} de {{ totalPages }}</span>
+  <button (click)="onNext()" [disabled]="!hasNextPage">Siguiente</button>
+</div>
